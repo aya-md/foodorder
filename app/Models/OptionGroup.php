@@ -8,19 +8,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[Fillable(['business_id','name','position'])]
-class Category extends Model
+#[fillable(['item_id','business_id','name'])]
+class OptionGroup extends Model
 {
     use HasFactory,BelongsToBusiness;
-    public function business(): BelongsTo
+
+    public function business():BelongsTo
     {
         return $this->belongsTo(Business::class);
     }
-    public function items(): HasMany
+    public function item():BelongsTo
     {
-        return $this->hasMany(Item::class);
+        return $this->belongsTo(Item::class);
+    }
+    public function options():HasMany
+    {
+        return $this->hasMany(Option::class);
     }
 
 }

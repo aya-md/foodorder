@@ -7,20 +7,24 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[Fillable(['business_id','name','position'])]
-class Category extends Model
+#[fillable(['business_id','option_group_id','label','extra_price'])]
+class Option extends Model
 {
     use HasFactory,BelongsToBusiness;
-    public function business(): BelongsTo
+
+    protected function casts():array
+    { return[
+        'extra_price' => 'decimal:2',
+    ];
+    }
+    public function business():BelongsTo
     {
         return $this->belongsTo(Business::class);
     }
-    public function items(): HasMany
-    {
-        return $this->hasMany(Item::class);
-    }
 
+    public function OptionGroup():BelongsTo
+    {
+        return $this->belongsTo(OptionGroup::class);
+    }
 }
