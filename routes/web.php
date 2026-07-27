@@ -5,6 +5,9 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\OptionGroupController;
+use App\Http\Controllers\OptionController;
+
 
 Route::get('/', function () {return view('welcome');});
 
@@ -21,6 +24,10 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'owner'])->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('items', ItemController::class);
+    Route::resource('items.option-groups', OptionGroupController::class)->shallow();
+    Route::resource('option-groups.options', OptionController::class)
+    ->only(['create', 'store', 'edit', 'update', 'destroy'])
+    ->shallow();
 });
 
 Route::middleware(['auth', 'super_admin'])->prefix('admin')->name('admin.')->group(function () {

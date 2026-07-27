@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="mt-4">
-                        <x-input-label for="price" :value="__('Price')" />
+                        <x-input-label for="price" :value="__('Price (:currency)', ['currency' => config('app.currency')])" />
                         <x-text-input id="price" class="block mt-1 w-full" type="number" step="0.01" min="0" name="price" :value="old('price', $item->price)" required />
                         <x-input-error :messages="$errors->get('price')" class="mt-2" />
                     </div>

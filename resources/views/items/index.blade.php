@@ -44,7 +44,7 @@
                                 </td>
                                 <td class="py-2">{{ $item->name }}</td>
                                 <td class="py-2">{{ $item->category->name }}</td>
-                                <td class="py-2">{{ $item->price }}</td>
+                                <td class="py-2">{{ number_format($item->price, 2) }} {{ config('app.currency') }}</td>
                                 <td class="py-2">{{ $item->available ? 'Yes' : 'No' }}</td>
                                 <td class="py-2">
                                     <a href="{{ route('items.edit', $item) }}" class="text-blue-600 underline">Edit</a>
