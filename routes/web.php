@@ -7,13 +7,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OptionGroupController;
 use App\Http\Controllers\OptionController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\StaffController;
 
 
 Route::get('/', function () {return view('welcome');});
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -28,6 +28,9 @@ Route::middleware(['auth', 'owner'])->group(function () {
     Route::resource('option-groups.options', OptionController::class)
     ->only(['create', 'store', 'edit', 'update', 'destroy'])
     ->shallow();
+    Route::resource('staff', StaffController::class)
+    ->parameters(['staff' => 'staff'])
+    ->only(['index', 'create', 'store', 'destroy']);
 });
 
 Route::middleware(['auth', 'super_admin'])->prefix('admin')->name('admin.')->group(function () {
