@@ -9,10 +9,20 @@ use App\Http\Controllers\OptionGroupController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 
 
 Route::get('/', function () {return view('welcome');});
-
+Route::get('/menu/{slug}', [MenuController::class, 'show'])->name('menu.show');
+Route::post('/cart/add/{item}', [CartController::class, 'add'])->name('cart.add');
+Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
+Route::get('/checkout', [OrderController::class, 'create'])->name('checkout.create');
+Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.store');
+Route::get('/order/{trackingUuid}', function ($trackingUuid) {
+    return "Order placeholder for: " . $trackingUuid;
+})->name('orders.show');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
