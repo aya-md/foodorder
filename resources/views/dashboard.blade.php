@@ -31,21 +31,27 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <a href="{{ route('categories.index') }}" class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-gray-50">
-                        <h3 class="text-lg font-semibold">Categories</h3>
-                        <p class="text-gray-600 mt-1">{{ $categoryCount }} {{ Str::plural('category', $categoryCount) }}</p>
-                    </a>
+                    @if ($user->role === 'owner')
+                        <a href="{{ route('categories.index') }}" class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-gray-50">
+                            <h3 class="text-lg font-semibold">Categories</h3>
+                            <p class="text-gray-600 mt-1">{{ $categoryCount }} {{ Str::plural('category', $categoryCount) }}</p>
+                        </a>
 
-                    <a href="{{ route('items.index') }}" class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-gray-50">
-                        <h3 class="text-lg font-semibold">Items</h3>
-                        <p class="text-gray-600 mt-1">{{ $itemCount }} {{ Str::plural('item', $itemCount) }}</p>
-                    </a>
+                        <a href="{{ route('items.index') }}" class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-gray-50">
+                            <h3 class="text-lg font-semibold">Items</h3>
+                            <p class="text-gray-600 mt-1">{{ $itemCount }} {{ Str::plural('item', $itemCount) }}</p>
+                        </a>
 
-                    <a href="{{ route('staff.index') }}" class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-gray-50">
-                        <h3 class="text-lg font-semibold">Staff</h3>
-                        <p class="text-gray-600 mt-1">Manage staff accounts</p>
+                        <a href="{{ route('staff.index') }}" class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-gray-50">
+                            <h3 class="text-lg font-semibold">Staff</h3>
+                            <p class="text-gray-600 mt-1">Manage staff accounts</p>
+                        </a>
+                    @endif
+
+                    <a href="{{ route('orders.index') }}" class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-gray-50">
+                        <h3 class="text-lg font-semibold">Order Queue</h3>
+                        <p class="text-gray-600 mt-1">{{ $activeOrderCount }} active {{ Str::plural('order', $activeOrderCount) }}</p>
                     </a>
-                    
                 </div>
             @else
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">

@@ -12,6 +12,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderQueueController;
 
 
 Route::get('/', function () {return view('welcome');});
@@ -20,9 +21,7 @@ Route::post('/cart/add/{item}', [CartController::class, 'add'])->name('cart.add'
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
 Route::get('/checkout', [OrderController::class, 'create'])->name('checkout.create');
 Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.store');
-Route::get('/order/{trackingUuid}', function ($trackingUuid) {
-    return "Order placeholder for: " . $trackingUuid;
-})->name('orders.show');
+Route::get('/order/{trackingUuid}', [OrderController::class, 'show'])->name('orders.show');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -47,6 +46,14 @@ Route::middleware(['auth', 'super_admin'])->prefix('admin')->name('admin.')->gro
     Route::get('/businesses', [BusinessApprovalController::class, 'index'])->name('businesses.index');
     Route::patch('/businesses/{business}/approve', [BusinessApprovalController::class, 'approve'])->name('businesses.approve');
     Route::patch('/businesses/{business}/suspend', [BusinessApprovalController::class, 'suspend'])->name('businesses.suspend');
+});
+
+Route::middleware(['auth', 'owner_or_staff'])->group(function () {
+    Route::get('/orders', [OrderQueueController::class, 'index'])->name('orders.index');
+    Route::patch('/orders/{order}/preparing', [OrderQueueController::class, 'markPreparing'])->name('orders.preparing');
+    Route::patch('/orders/{order}/ready', [OrderQueueController::class, 'markReady'])->name('orders.ready');
+    Route::patch('/orders/{order}/completed', [OrderQueueController::class, 'markCompleted'])->name('orders.completed');
+    Route::patch('/orders/{order}/cancel', [OrderQueueController::class, 'cancel'])->name('orders.cancel');
 });
 
 require __DIR__.'/auth.php';

@@ -94,4 +94,12 @@ class OrderController extends Controller
 
         return redirect()->route('orders.show', $order->tracking_uuid)->with('status', 'Order placed successfully!');
     }
+    public function show(string $trackingUuid): View
+    {
+        $order = Order::with('items.item')
+            ->where('tracking_uuid', $trackingUuid)
+            ->firstOrFail();
+
+        return view('orders.show', compact('order'));
+    }
 }
