@@ -8,6 +8,7 @@ use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Events\NewOrderPlaced;
 
 class OrderController extends Controller
 {
@@ -89,6 +90,7 @@ class OrderController extends Controller
         foreach ($orderItemsData as $data) {
             $order->items()->create($data);
         }
+        event(new NewOrderPlaced($order));
 
         session()->forget('cart');
 

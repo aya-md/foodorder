@@ -71,4 +71,13 @@
 
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.Echo.private(`business.{{ auth()->user()->business_id }}.orders`)
+                .listen('.order.created', (e) => {
+                    window.location.reload();
+                });
+        });
+    </script>
 </x-app-layout>
