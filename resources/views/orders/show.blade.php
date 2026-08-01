@@ -54,5 +54,13 @@
             </p>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+           window.Echo.channel('order.{{ $order->tracking_uuid }}')
+              .listen('.order.status.updated', (e) => {
+                 window.location.reload();
+              });
+       });
+    </script>
 </body>
 </html>

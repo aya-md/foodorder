@@ -46,6 +46,10 @@
                             <h3 class="text-lg font-semibold">Staff</h3>
                             <p class="text-gray-600 mt-1">Manage staff accounts</p>
                         </a>
+                        <a href="{{ route('stats.index') }}" class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-gray-50">
+                            <h3 class="text-lg font-semibold">Stats</h3>
+                            <p class="text-gray-600 mt-1">View today's performance</p>
+                        </a>
                     @endif
 
                     <a href="{{ route('orders.index') }}" class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-gray-50">

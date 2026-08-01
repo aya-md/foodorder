@@ -6,6 +6,7 @@ use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Events\OrderStatusUpdated;
 
 class OrderQueueController extends Controller
 {
@@ -20,30 +21,34 @@ class OrderQueueController extends Controller
     }
 
     public function markPreparing(Order $order): RedirectResponse
-    {
-        $order->update(['status' => 'preparing']);
+{
+    $order->update(['status' => 'preparing']);
+    event(new OrderStatusUpdated($order));
 
-        return back()->with('status', "Order #{$order->id} marked as preparing.");
-    }
+    return back()->with('status', "Order #{$order->id} marked as preparing.");
+}
 
-    public function markReady(Order $order): RedirectResponse
-    {
-        $order->update(['status' => 'ready']);
+public function markReady(Order $order): RedirectResponse
+{
+    $order->update(['status' => 'ready']);
+    event(new OrderStatusUpdated($order));
 
-        return back()->with('status', "Order #{$order->id} marked as ready.");
-    }
+    return back()->with('status', "Order #{$order->id} marked as ready.");
+}
 
-    public function markCompleted(Order $order): RedirectResponse
-    {
-        $order->update(['status' => 'completed']);
+public function markCompleted(Order $order): RedirectResponse
+{
+    $order->update(['status' => 'completed']);
+    event(new OrderStatusUpdated($order));
 
-        return back()->with('status', "Order #{$order->id} marked as completed.");
-    }
+    return back()->with('status', "Order #{$order->id} marked as completed.");
+}
 
-    public function cancel(Order $order): RedirectResponse
-    {
-        $order->update(['status' => 'cancelled']);
+public function cancel(Order $order): RedirectResponse
+{
+    $order->update(['status' => 'cancelled']);
+    event(new OrderStatusUpdated($order));
 
-        return back()->with('status', "Order #{$order->id} cancelled.");
-    }
+    return back()->with('status', "Order #{$order->id} cancelled.");
+}
 }

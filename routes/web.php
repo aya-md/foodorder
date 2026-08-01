@@ -13,6 +13,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderQueueController;
+use App\Http\Controllers\StatsController;
 
 
 Route::get('/', function () {return view('welcome');});
@@ -40,6 +41,7 @@ Route::middleware(['auth', 'owner'])->group(function () {
     Route::resource('staff', StaffController::class)
     ->parameters(['staff' => 'staff'])
     ->only(['index', 'create', 'store', 'destroy']);
+    Route::get('/stats', [StatsController::class, 'index'])->name('stats.index');
 });
 
 Route::middleware(['auth', 'super_admin'])->prefix('admin')->name('admin.')->group(function () {
