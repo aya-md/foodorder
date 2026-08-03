@@ -30,6 +30,13 @@
                     @endif
                 </div>
 
+                @if ($business->status === 'approved')
+                   <a href="{{ route('menu.show', $business->slug) }}" target="_blank" class="inline-block mt-3 text-indigo-600 underline text-sm">
+                      View My Public Menu →
+                   </a>
+                @endif
+
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     @if ($user->role === 'owner')
                         <a href="{{ route('categories.index') }}" class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-gray-50">

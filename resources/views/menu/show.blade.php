@@ -14,6 +14,14 @@
               {{ session('status') }}
            </div>
         @endif
+        @if ($cartCount > 0)
+           <div class="mb-4">
+              <a href="{{ route('cart.show') }}" class="inline-block bg-indigo-600 text-white text-sm px-3 py-1.5 rounded">
+                 🛒 View Cart ({{ $cartCount }} {{ Str::plural('item', $cartCount) }})
+              </a>
+              <a href="{{ route('orders.mine') }}" class="text-sm text-gray-600 underline">My Orders</a>
+    </div>
+@endif
         @forelse ($categories as $category)
             <div class="mb-8">
                 <h2 class="text-lg font-semibold mb-3">{{ $category->name }}</h2>

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewOrderPlaced;
 use App\Models\Business;
 use App\Models\Item;
 use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Events\NewOrderPlaced;
 
 class OrderController extends Controller
 {
@@ -90,12 +90,18 @@ class OrderController extends Controller
         foreach ($orderItemsData as $data) {
             $order->items()->create($data);
         }
+
         event(new NewOrderPlaced($order));
 
         session()->forget('cart');
 
+        $recentOrders = session('recent_orders', []);
+        $recentOrders[] = $order->tracking_uuid;
+        session(['recent_orders' => array_slice($recentOrders, -10)]);
+
         return redirect()->route('orders.show', $order->tracking_uuid)->with('status', 'Order placed successfully!');
     }
+
     public function show(string $trackingUuid): View
     {
         $order = Order::with('items.item')
@@ -103,5 +109,16 @@ class OrderController extends Controller
             ->firstOrFail();
 
         return view('orders.show', compact('order'));
+    }
+
+    public function myOrders(): View
+    {
+        $trackingUuids = session('recent_orders', []);
+
+        $orders = Order::whereIn('tracking_uuid', $trackingUuids)
+            ->latest()
+            ->get();
+
+        return view('orders.my-orders', compact('orders'));
     }
 }

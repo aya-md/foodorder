@@ -9,7 +9,9 @@
 <body class="bg-gray-100 min-h-screen">
     <div class="max-w-xl mx-auto py-10 px-4">
         <h1 class="text-2xl font-bold mb-6">Checkout — {{ $business->name }}</h1>
-
+        <a href="{{ route('cart.show') }}" class="text-indigo-600 underline text-sm">
+        ← Back to Cart
+        </a>
         @if ($errors->any())
             <div class="mb-4 p-3 bg-red-100 text-red-800 rounded">
                 <ul class="list-disc list-inside">

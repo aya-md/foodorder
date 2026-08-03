@@ -33,6 +33,17 @@ class StatsController extends Controller
             ->take(5)
             ->get();
 
-        return view('stats.index', compact('ordersToday', 'revenueToday', 'topItems'));
+        $labels = collect(range(6, 0))->map(fn ($daysAgo) => now()->subDays($daysAgo)->format('Y-m-d'));
+
+        $revenueByDay = Order::where('status', '!=', 'cancelled')
+            ->where('created_at', '>=', now()->subDays(6)->startOfDay())
+            ->selectRaw('DATE(created_at) as date, SUM(total) as total')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->pluck('total', 'date');
+
+        $revenueData = $labels->map(fn ($date) => (float) ($revenueByDay[$date] ?? 0));
+       
+        return view('stats.index', compact('ordersToday', 'revenueToday', 'topItems', 'labels', 'revenueData'));
     }
 }

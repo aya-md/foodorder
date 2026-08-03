@@ -20,7 +20,9 @@ class MenuController extends Controller
         ])
         ->orderBy('position')
         ->get();
-     return view('menu.show',compact('business','categories'));
+      $cart = session('cart', ['business_id' => null, 'items' => [] ]);
+      $cartCount = $cart['business_id'] === $business->id ? array_sum(array_column($cart['items'], 'quantity')) : 0;
+     return view('menu.show',compact('business','categories','cartCount'));
 
    }
 }

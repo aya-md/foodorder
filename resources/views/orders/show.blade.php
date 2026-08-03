@@ -48,10 +48,14 @@
                 <span>Total</span>
                 <span>{{ number_format($order->total, 2) }} {{ config('app.currency') }}</span>
             </div>
-
-            <p class="text-xs text-gray-400 mt-6 text-center">
-                Bookmark this page to check your order status anytime.
-            </p>
+            <div class="mt-6 flex justify-center gap-4 text-sm">
+                <a href="{{ route('menu.show', $order->business->slug) }}" class="text-indigo-600 underline">
+                  Order Again
+                </a>
+                <a href="{{ route('orders.mine') }}" class="text-indigo-600 underline">
+                   My Orders
+                </a>
+</div>
         </div>
     </div>
     <script>

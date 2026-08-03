@@ -14,9 +14,10 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderQueueController;
 use App\Http\Controllers\StatsController;
+use App\Http\Controllers\HomeController;
 
 
-Route::get('/', function () {return view('welcome');});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/menu/{slug}', [MenuController::class, 'show'])->name('menu.show');
 Route::post('/cart/add/{item}', [CartController::class, 'add'])->name('cart.add');
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
@@ -24,6 +25,7 @@ Route::get('/checkout', [OrderController::class, 'create'])->name('checkout.crea
 Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.store');
 Route::get('/order/{trackingUuid}', [OrderController::class, 'show'])->name('orders.show');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/my-orders', [OrderController::class, 'myOrders'])->name('orders.mine');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -9,6 +9,11 @@
 <body class="bg-gray-100 min-h-screen">
     <div class="max-w-3xl mx-auto py-10 px-4">
         <h1 class="text-2xl font-bold mb-6">Your Cart</h1>
+        @if ($business)
+        <a href="{{ route('menu.show', $business->slug) }}" class="text-indigo-600 underline text-sm">
+             ← Continue Shopping
+        </a>
+        @endif
 
         @if ($business)
             <p class="text-gray-600 mb-4">Ordering from {{ $business->name }}</p>
@@ -25,12 +30,18 @@
         @empty
             <p class="text-gray-500">Your cart is empty.</p>
         @endforelse
-
         @if ($items->isNotEmpty())
-            <div class="mt-4 text-right font-bold text-lg">
-                Total: {{ number_format($total, 2) }} {{ config('app.currency') }}
-            </div>
+          <div class="mt-4 text-right font-bold text-lg">
+              Total: {{ number_format($total, 2) }} {{ config('app.currency') }}
+          </div>
+
+          <div class="mt-4 text-right">
+               <a href="{{ route('checkout.create') }}" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded">
+                    Proceed to Checkout
+               </a>
+          </div>
         @endif
+
     </div>
 </body>
 </html>
