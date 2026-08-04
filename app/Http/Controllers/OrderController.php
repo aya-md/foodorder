@@ -22,7 +22,11 @@ class OrderController extends Controller
 
         $business = Business::find($cart['business_id']);
 
-        return view('orders.create', compact('business'));
+        $tableNumber = session('dine_in_business_id') === $business->id
+            ? session('dine_in_table')
+            : null;
+
+        return view('orders.create', compact('business', 'tableNumber'));
     }
 
     public function store(Request $request): RedirectResponse

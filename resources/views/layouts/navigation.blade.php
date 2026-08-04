@@ -15,6 +15,36 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @if (Auth::user()->role === 'owner')
+                        <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
+                            {{ __('Categories') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('items.index')" :active="request()->routeIs('items.*')">
+                            {{ __('Items') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.*')">
+                            {{ __('Staff') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('stats.index')" :active="request()->routeIs('stats.*')">
+                            {{ __('Stats') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('tables.index')" :active="request()->routeIs('tables.*')">
+                            {{ __('Tables') }}
+                        </x-nav-link>
+                    @endif
+
+                    @if (in_array(Auth::user()->role, ['owner', 'staff']))
+                        <x-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.index')">
+                            {{ __('Order Queue') }}
+                        </x-nav-link>
+                    @endif
+
+                    @if (Auth::user()->role === 'super_admin')
+                        <x-nav-link :href="route('admin.businesses.index')" :active="request()->routeIs('admin.*')">
+                            {{ __('Business Approvals') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -57,7 +87,7 @@
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
@@ -70,6 +100,36 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            @if (Auth::user()->role === 'owner')
+                <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
+                    {{ __('Categories') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('items.index')" :active="request()->routeIs('items.*')">
+                    {{ __('Items') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.*')">
+                    {{ __('Staff') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('stats.index')" :active="request()->routeIs('stats.*')">
+                    {{ __('Stats') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('tables.index')" :active="request()->routeIs('tables.*')">
+                    {{ __('Tables') }}
+                </x-responsive-nav-link>
+            @endif
+
+            @if (in_array(Auth::user()->role, ['owner', 'staff']))
+                <x-responsive-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.index')">
+                    {{ __('Order Queue') }}
+                </x-responsive-nav-link>
+            @endif
+
+            @if (Auth::user()->role === 'super_admin')
+                <x-responsive-nav-link :href="route('admin.businesses.index')" :active="request()->routeIs('admin.*')">
+                    {{ __('Business Approvals') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

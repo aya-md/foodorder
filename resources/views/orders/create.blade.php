@@ -9,11 +9,13 @@
 <body class="bg-gray-100 min-h-screen">
     <div class="max-w-xl mx-auto py-10 px-4">
         <h1 class="text-2xl font-bold mb-6">Checkout — {{ $business->name }}</h1>
+
         <a href="{{ route('cart.show') }}" class="text-indigo-600 underline text-sm">
-        ← Back to Cart
+            ← Back to Cart
         </a>
+
         @if ($errors->any())
-            <div class="mb-4 p-3 bg-red-100 text-red-800 rounded">
+            <div class="mb-4 p-3 bg-red-100 text-red-800 rounded mt-4">
                 <ul class="list-disc list-inside">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -22,7 +24,8 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('checkout.store') }}" class="bg-white rounded-lg shadow-sm p-6">
+        <form method="POST" action="{{ route('checkout.store') }}" class="bg-white rounded-lg shadow-sm p-6 mt-4"
+              x-data="{ orderType: '{{ old('type', $tableNumber ? 'dine_in' : 'take_away') }}' }">
             @csrf
 
             <div>
@@ -37,15 +40,20 @@
 
             <div class="mt-4">
                 <label class="block text-sm font-medium">Order Type</label>
-                <select name="type" id="type" class="block mt-1 w-full border-gray-300 rounded-md" required>
-                    <option value="take_away" @selected(old('type') === 'take_away')>Take_away</option>
-                    <option value="dine_in" @selected(old('type') === 'dine_in')>Dine-in</option>
+                <select name="type" id="type" x-model="orderType" class="block mt-1 w-full border-gray-300 rounded-md" required>
+                    <option value="take_away">Takeaway</option>
+                    <option value="dine_in">Dine-in</option>
                 </select>
             </div>
 
-            <div class="mt-4" id="table-field">
+            <div class="mt-4" id="table-field" x-show="orderType === 'dine_in'">
                 <label class="block text-sm font-medium">Table Number</label>
-                <input type="text" name="table_number" value="{{ old('table_number') }}" class="block mt-1 w-full border-gray-300 rounded-md">
+                <select name="table_number" class="block mt-1 w-full border-gray-300 rounded-md">
+                    <option value="">Select a table</option>
+                    @for ($i = 1; $i <= $business->table_count; $i++)
+                        <option value="{{ $i }}" @selected(old('table_number', $tableNumber) == $i)>Table {{ $i }}</option>
+                    @endfor
+                </select>
             </div>
 
             <button type="submit" class="mt-6 bg-indigo-600 text-white px-4 py-2 rounded">Place Order</button>

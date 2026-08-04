@@ -14,6 +14,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderQueueController;
 use App\Http\Controllers\StatsController;
+use App\Http\Controllers\TableQrController;
 use App\Http\Controllers\HomeController;
 
 
@@ -44,6 +45,8 @@ Route::middleware(['auth', 'owner'])->group(function () {
     ->parameters(['staff' => 'staff'])
     ->only(['index', 'create', 'store', 'destroy']);
     Route::get('/stats', [StatsController::class, 'index'])->name('stats.index');
+    Route::get('/tables', [TableQrController::class, 'index'])->name('tables.index');
+Route::patch('/tables', [TableQrController::class, 'update'])->name('tables.update');
 });
 
 Route::middleware(['auth', 'super_admin'])->prefix('admin')->name('admin.')->group(function () {

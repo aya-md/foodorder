@@ -47,7 +47,8 @@
                                 <td class="py-2">{{ number_format($item->price, 2) }} {{ config('app.currency') }}</td>
                                 <td class="py-2">{{ $item->available ? 'Yes' : 'No' }}</td>
                                 <td class="py-2">
-                                    <a href="{{ route('items.edit', $item) }}" class="text-blue-600 underline">Edit</a>
+                                    <a href="{{ route('items.option-groups.index', $item) }}" class="text-indigo-600 underline">Options</a>
+                                    <a href="{{ route('items.edit', $item) }}" class="text-blue-600 underline ml-2">Edit</a>
 
                                     <form method="POST" action="{{ route('items.destroy', $item) }}" class="inline ml-2">
                                         @csrf
@@ -58,7 +59,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="py-4 text-gray-500">No items yet.</td>
+                                <td colspan="6" class="py-4 text-gray-500">No items yet.</td>
                             </tr>
                         @endforelse
                     </tbody>
