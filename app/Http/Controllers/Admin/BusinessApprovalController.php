@@ -35,15 +35,21 @@ class BusinessApprovalController extends Controller
     {
         $request->validate(['reason' => ['nullable', 'string', 'max:500']]);
 
+        $wasPending = $business->status === 'pending';
+
         $business->update(['status' => 'suspended']);
 
         AdminActionLog::create([
             'admin_id' => $request->user()->id,
             'business_id' => $business->id,
-            'action' => 'suspended',
+            'action' => $wasPending ? 'rejected' : 'suspended',
             'reason' => $request->reason,
         ]);
 
-        return back()->with('status', "{$business->name} has been suspended.");
+        $message = $wasPending
+            ? "{$business->name} has been rejected."
+            : "{$business->name} has been suspended.";
+
+        return back()->with('status', $message);
     }
 }

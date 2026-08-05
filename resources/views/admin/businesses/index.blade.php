@@ -41,7 +41,7 @@
                                         <form method="POST" action="{{ route('admin.businesses.suspend', $business) }}" class="inline ml-2">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="text-red-600 underline">Suspend</button>
+                                            <button type="submit" class="text-red-600 underline">{{ $business->status === 'pending' ? 'Reject' : 'Suspend' }}</button>
                                         </form>
                                     @endif
                                 </td>
