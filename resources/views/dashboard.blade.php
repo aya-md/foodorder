@@ -1,70 +1,80 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @if ($business)
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 mb-6">
-                    <h3 class="text-lg font-semibold">{{ $business->name }}</h3>
-                    <p class="mt-1">
-                        Status:
-                        @if ($business->status === 'approved')
-                            <span class="text-green-600 font-semibold">Approved</span>
-                        @elseif ($business->status === 'pending')
-                            <span class="text-yellow-600 font-semibold">Pending Approval</span>
-                        @else
-                            <span class="text-red-600 font-semibold">Suspended</span>
-                        @endif
-                    </p>
-                    @if ($business->status === 'pending')
-                        <p class="mt-2 text-sm text-gray-600">
-                            Your business is awaiting approval. You can still prepare your menu in the meantime — it just won't be visible to customers until approved.
-                        </p>
+<x-layouts.console title="Dashboard">
+    <div class="page-head">
+        <div>
+            <div class="eyebrow">{{ Auth::user()->role === 'super_admin' ? 'Platform Admin' : 'Vendor Console' }}</div>
+            <h1>Dashboard</h1>
+        </div>
+    </div>
+
+    @if ($business)
+        <div class="status-block panel" style="margin:20px 40px 0;">
+            <div class="status-block-info">
+                <div class="biz-name">{{ $business->name }}</div>
+                <div class="biz-sub">
+                    @if ($business->status === 'approved')
+                        Live on the marketplace
+                    @elseif ($business->status === 'pending')
+                        Awaiting approval — menu hidden from customers
+                    @else
+                        Suspended — not accepting orders
                     @endif
                 </div>
                 @if ($business->status === 'approved')
-                   <a href="{{ route('menu.show', $business->slug) }}" target="_blank" class="inline-block mt-3 text-indigo-600 underline text-sm">
-                      View My Public Menu →
-                   </a>
+                    <a href="{{ route('menu.show', $business->slug) }}" target="_blank" class="act-btn mint" style="display:inline-block;margin-top:14px;">View Public Menu →</a>
                 @endif
+            </div>
+            <div class="status-ring {{ $business->status }}">
+                @if ($business->status === 'approved')
+                    <span class="check">✓</span> Approved
+                @elseif ($business->status === 'pending')
+                    <span class="check">⏳</span> Pending
+                @else
+                    <span class="check">⛔</span> Suspended
+                @endif
+            </div>
+        </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                    @if ($user->role === 'owner')
-                        <a href="{{ route('categories.index') }}" class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-gray-50">
-                            <h3 class="text-lg font-semibold">Categories</h3>
-                            <p class="text-gray-600 mt-1">{{ $categoryCount }} {{ Str::plural('category', $categoryCount) }}</p>
-                        </a>
-                        <a href="{{ route('items.index') }}" class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-gray-50">
-                            <h3 class="text-lg font-semibold">Items</h3>
-                            <p class="text-gray-600 mt-1">{{ $itemCount }} {{ Str::plural('item', $itemCount) }}</p>
-                        </a>
-                        <a href="{{ route('staff.index') }}" class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-gray-50">
-                            <h3 class="text-lg font-semibold">Staff</h3>
-                            <p class="text-gray-600 mt-1">Manage staff accounts</p>
-                        </a>
-                        <a href="{{ route('stats.index') }}" class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-gray-50">
-                            <h3 class="text-lg font-semibold">Stats</h3>
-                            <p class="text-gray-600 mt-1">View today's performance</p>
-                        </a>
-                        <a href="{{ route('tables.index') }}" class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-gray-50">
-                            <h3 class="text-lg font-semibold">Table QR Codes</h3>
-                            <p class="text-gray-600 mt-1">Print codes for dine-in ordering</p>
-                        </a>
-                    @endif
-                    <a href="{{ route('orders.index') }}" class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-gray-50">
-                        <h3 class="text-lg font-semibold">Order Queue</h3>
-                        <p class="text-gray-600 mt-1">{{ $activeOrderCount }} active {{ Str::plural('order', $activeOrderCount) }}</p>
-                    </a>
-                </div>
-            @else
-                <a href="{{ route('admin.businesses.index') }}" class="block bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 hover:bg-gray-50 max-w-md">
-                    <h3 class="text-lg font-semibold">Business Approvals</h3>
-                    <p class="text-gray-600 mt-1">Review and manage registered businesses</p>
+        <div class="dash-grid">
+            @if ($user->role === 'owner')
+                <a href="{{ route('categories.index') }}" class="dash-card">
+                    <span class="tag">№ 01</span>
+                    <p class="dash-title">Categories</p>
+                    <p class="dash-sub">{{ $categoryCount }} {{ Str::plural('category', $categoryCount) }}</p>
+                </a>
+                <a href="{{ route('items.index') }}" class="dash-card">
+                    <span class="tag">№ 02</span>
+                    <p class="dash-title">Items</p>
+                    <p class="dash-sub">{{ $itemCount }} {{ Str::plural('item', $itemCount) }}</p>
+                </a>
+                <a href="{{ route('staff.index') }}" class="dash-card">
+                    <span class="tag">№ 03</span>
+                    <p class="dash-title">Staff</p>
+                    <p class="dash-sub">Manage accounts</p>
+                </a>
+                <a href="{{ route('stats.index') }}" class="dash-card">
+                    <span class="tag">№ 04</span>
+                    <p class="dash-title">Stats</p>
+                    <p class="dash-sub">Today's performance</p>
+                </a>
+                <a href="{{ route('tables.index') }}" class="dash-card">
+                    <span class="tag">№ 05</span>
+                    <p class="dash-title">Table QR Codes</p>
+                    <p class="dash-sub">Print for dine-in</p>
                 </a>
             @endif
+            <a href="{{ route('orders.index') }}" class="dash-card">
+                <span class="tag">№ 06</span>
+                <p class="dash-title">Order Queue</p>
+                <p class="dash-sub">{{ $activeOrderCount }} active {{ Str::plural('order', $activeOrderCount) }}</p>
+            </a>
         </div>
-    </div>
-</x-app-layout>
+    @else
+        <div class="dash-grid">
+            <a href="{{ route('admin.businesses.index') }}" class="dash-card">
+                <span class="tag">№ 01</span>
+                <p class="dash-title">Business Approvals</p>
+                <p class="dash-sub">Review registrations</p>
+            </a>
+        </div>
+    @endif
+</x-layouts.console>

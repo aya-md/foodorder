@@ -1,29 +1,29 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Add Option Group') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-
-                <form method="POST" action="{{ route('items.option-groups.store', $item) }}">
-                    @csrf
-
-                    <div>
-                        <x-input-label for="name" :value="__('Group Name (e.g. Size, Extras)')" />
-                        <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
-                        <x-input-error :messages="$errors->get('name')" class="mt-2" />
-                    </div>
-
-                    <div class="mt-4">
-                        <x-primary-button>{{ __('Save') }}</x-primary-button>
-                    </div>
-                </form>
-
-            </div>
+<x-layouts.console title="Add Option Group">
+    <div class="page-head">
+        <div>
+            <div class="eyebrow">Vendor Console</div>
+            <h1>Add Option Group</h1>
         </div>
     </div>
-</x-app-layout>
+
+    @if ($errors->any())
+        <div class="form-errors">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('items.option-groups.store', $item) }}" class="panel form-panel">
+        @csrf
+
+        <div class="form-field">
+            <label>Group Name (e.g. Size, Extras)</label>
+            <input type="text" name="name" value="{{ old('name') }}" required autofocus>
+        </div>
+
+        <button type="submit" class="act-btn mint">Save</button>
+    </form>
+</x-layouts.console>

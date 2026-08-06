@@ -11,14 +11,30 @@ use App\Events\OrderStatusUpdated;
 class OrderQueueController extends Controller
 {
     public function index(): View
-    {
-        $orders = Order::with('items.item')
-            ->whereNotIn('status', ['completed', 'cancelled'])
-            ->orderBy('created_at')
-            ->get();
+{
+    $orders = Order::with('items.item')
+        ->whereNotIn('status', ['completed', 'cancelled'])
+        ->orderBy('created_at')
+        ->get()
+        ->groupBy('status');
 
-        return view('orders.queue', compact('orders'));
-    }
+    $completedToday = Order::with('items.item')
+        ->whereDate('updated_at', today())
+        ->where('status', 'completed')
+        ->latest()
+        ->get();
+
+    $columns = [
+        'pending' => ['label' => 'Pending', 'dot' => 'chili', 'pulse' => true, 'orders' => $orders->get('pending', collect())],
+        'preparing' => ['label' => 'Preparing', 'dot' => 'amber', 'pulse' => false, 'orders' => $orders->get('preparing', collect())],
+        'ready' => ['label' => 'Ready', 'dot' => 'mint', 'pulse' => false, 'orders' => $orders->get('ready', collect())],
+        'completed' => ['label' => 'Completed Today', 'dot' => 'dim', 'pulse' => false, 'orders' => $completedToday],
+    ];
+
+    $activeCount = $orders->flatten()->count();
+
+    return view('orders.queue', compact('columns', 'activeCount'));
+}
 
     public function markPreparing(Order $order): RedirectResponse
 {

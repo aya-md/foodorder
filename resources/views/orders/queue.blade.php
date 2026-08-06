@@ -1,83 +1,65 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Order Queue') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-
-            @if (session('status'))
-                <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">
-                    {{ session('status') }}
-                </div>
-            @endif
-
-            @forelse ($orders as $order)
-                <div class="bg-white rounded-lg shadow-sm p-4 mb-4">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="font-semibold">Order #{{ $order->id }} — {{ $order->customer_name }}</p>
-                            <p class="text-sm text-gray-500">
-                                {{ $order->type === 'dine_in' ? 'Dine-in, table '.$order->table_number : 'Takeaway' }}
-                                &middot; Status: <span class="font-medium">{{ $order->status }}</span>
-                            </p>
-                        </div>
-                        <p class="font-semibold">{{ number_format($order->total, 2) }} {{ config('app.currency') }}</p>
-                    </div>
-
-                    <ul class="mt-2 text-sm text-gray-600">
-                        @foreach ($order->items as $orderItem)
-                            <li>{{ $orderItem->quantity }}x {{ $orderItem->item->name ?? 'Item removed' }}</li>
-                        @endforeach
-                    </ul>
-
-                    <div class="mt-3 flex gap-2">
-                        @if ($order->status === 'pending')
-                            <form method="POST" action="{{ route('orders.preparing', $order) }}">
-                                @csrf @method('PATCH')
-                                <button class="bg-blue-600 text-white text-sm px-3 py-1.5 rounded">Start Preparing</button>
-                            </form>
-                        @endif
-
-                        @if ($order->status === 'preparing')
-                            <form method="POST" action="{{ route('orders.ready', $order) }}">
-                                @csrf @method('PATCH')
-                                <button class="bg-indigo-600 text-white text-sm px-3 py-1.5 rounded">Mark Ready</button>
-                            </form>
-                        @endif
-
-                        @if ($order->status === 'ready')
-                            <form method="POST" action="{{ route('orders.completed', $order) }}">
-                                @csrf @method('PATCH')
-                                <button class="bg-green-600 text-white text-sm px-3 py-1.5 rounded">Complete</button>
-                            </form>
-                        @endif
-
-                        @if (! in_array($order->status, ['completed', 'cancelled']))
-                            <form method="POST" action="{{ route('orders.cancel', $order) }}">
-                                @csrf @method('PATCH')
-                                <button class="bg-red-600 text-white text-sm px-3 py-1.5 rounded" onclick="return confirm('Cancel this order?')">Cancel</button>
-                            </form>
-                        @endif
-                    </div>
-                </div>
-            @empty
-                <div class="bg-white rounded-lg shadow-sm p-6 text-gray-500">
-                    No active orders right now.
-                </div>
-            @endforelse
-
+<x-layouts.console title="Order Queue">
+    <div class="page-head">
+        <div>
+            <div class="eyebrow">Vendor Console</div>
+            <h1>Order Queue</h1>
         </div>
+        <div class="mono" style="color:var(--amber);">{{ $activeCount }} active {{ Str::plural('order', $activeCount) }}</div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            window.Echo.private(`business.{{ auth()->user()->business_id }}.orders`)
-                .listen('.order.created', (e) => {
-                    window.location.reload();
-                });
-        });
-    </script>
-</x-app-layout>
+    <div class="queue-grid">
+        @foreach ($columns as $key => $column)
+            <div class="queue-col">
+                <div class="queue-col-head">
+                    <span class="dot {{ $column['dot'] }} {{ $column['pulse'] ? 'pulse' : '' }}"></span>
+                    {{ $column['label'] }}
+                    <span class="count">{{ $column['orders']->count() }}</span>
+                </div>
+
+                @forelse ($column['orders'] as $order)
+                    <div class="ticket-card">
+                        <div class="ticket-top">
+                            <span class="ticket-id mono">#{{ $order->id }}</span>
+                            <span class="ticket-time mono">{{ $order->created_at->diffForHumans(null, true) }} ago</span>
+                        </div>
+                        <div class="ticket-items">
+                            @foreach ($order->items as $orderItem)
+                                <div>{{ $orderItem->quantity }}x {{ $orderItem->item->name ?? 'Item removed' }}</div>
+                            @endforeach
+                        </div>
+                        <div class="ticket-footer">
+                            <span class="ticket-price mono">{{ number_format($order->total, 2) }} {{ config('app.currency') }}</span>
+                            <div class="ticket-actions">
+                                @if ($key === 'pending')
+                                    <form method="POST" action="{{ route('orders.preparing', $order) }}">
+                                        @csrf @method('PATCH')
+                                        <button class="act-btn amber">Accept</button>
+                                    </form>
+                                @elseif ($key === 'preparing')
+                                    <form method="POST" action="{{ route('orders.ready', $order) }}">
+                                        @csrf @method('PATCH')
+                                        <button class="act-btn mint">Mark Ready</button>
+                                    </form>
+                                @elseif ($key === 'ready')
+                                    <form method="POST" action="{{ route('orders.completed', $order) }}">
+                                        @csrf @method('PATCH')
+                                        <button class="act-btn mint">Complete</button>
+                                    </form>
+                                @endif
+
+                                @if ($key !== 'completed')
+                                    <form method="POST" action="{{ route('orders.cancel', $order) }}">
+                                        @csrf @method('PATCH')
+                                        <button class="act-btn chili" onclick="return confirm('Cancel this order?')">Cancel</button>
+                                    </form>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <p class="mono" style="color:var(--paper-dim);font-size:12px;padding:10px 0;">No orders</p>
+                @endforelse
+            </div>
+        @endforeach
+    </div>
+</x-layouts.console>

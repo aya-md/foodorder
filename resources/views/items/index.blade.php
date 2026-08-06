@@ -1,71 +1,63 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Menu Items') }}
-        </h2>
-    </x-slot>
+<x-layouts.console title="Items">
+    <div class="page-head">
+        <div>
+            <div class="eyebrow">Vendor Console</div>
+            <h1>Menu Items</h1>
+        </div>
+        <a href="{{ route('items.create') }}" class="act-btn mint">+ Add Item</a>
+    </div>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-
-                @if (session('status'))
-                    <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">
-                        {{ session('status') }}
-                    </div>
-                @endif
-
-                <div class="mb-4">
-                    <a href="{{ route('items.create') }}" class="text-indigo-600 underline">
-                        + Add Item
-                    </a>
-                </div>
-
-                <table class="w-full text-left">
-                    <thead>
-                        <tr class="border-b">
-                              <th class="py-2">Photo</th>
-                              <th class="py-2">Name</th>
-                              <th class="py-2">Category</th>
-                              <th class="py-2">Price</th>
-                              <th class="py-2">Available</th>
-                               <th class="py-2">Actions</th>
+    <div class="wrap" style="padding:20px 40px 40px;">
+        <div class="panel">
+            <table style="width:100%;border-collapse:collapse;">
+                <thead>
+                    <tr>
+                        <th class="mono" style="text-align:left;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-dim);padding:16px 22px;border-bottom:1px solid var(--line);font-weight:500;">Item</th>
+                        <th class="mono" style="text-align:left;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-dim);padding:16px 22px;border-bottom:1px solid var(--line);font-weight:500;">Category</th>
+                        <th class="mono" style="text-align:left;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-dim);padding:16px 22px;border-bottom:1px solid var(--line);font-weight:500;">Price</th>
+                        <th class="mono" style="text-align:left;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-dim);padding:16px 22px;border-bottom:1px solid var(--line);font-weight:500;">Available</th>
+                        <th class="mono" style="text-align:right;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-dim);padding:16px 22px;border-bottom:1px solid var(--line);font-weight:500;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($items as $item)
+                        <tr>
+                            <td style="padding:16px 22px;border-bottom:1px dashed var(--line);">
+                                <div style="display:flex;align-items:center;gap:12px;">
+                                    @if ($item->image)
+                                        <img src="{{ Storage::url($item->image) }}" alt="{{ $item->name }}" style="width:38px;height:38px;border-radius:8px;object-fit:cover;border:1px solid var(--line);">
+                                    @else
+                                        <div style="width:38px;height:38px;border-radius:8px;background:var(--panel-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--amber);flex-shrink:0;">🍽</div>
+                                    @endif
+                                    <span style="font-weight:700;">{{ $item->name }}</span>
+                                </div>
+                            </td>
+                            <td class="mono" style="padding:16px 22px;border-bottom:1px dashed var(--line);color:var(--paper-dim);font-size:12.5px;">{{ $item->category->name }}</td>
+                            <td class="mono" style="padding:16px 22px;border-bottom:1px dashed var(--line);color:var(--amber);font-weight:700;">{{ number_format($item->price, 2) }} {{ config('app.currency') }}</td>
+                            <td style="padding:16px 22px;border-bottom:1px dashed var(--line);">
+                                @if ($item->available)
+                                    <span class="status-pill approved"><span class="dot"></span>Yes</span>
+                                @else
+                                    <span class="status-pill suspended"><span class="dot"></span>No</span>
+                                @endif
+                            </td>
+                            <td style="padding:16px 22px;border-bottom:1px dashed var(--line);text-align:right;">
+                                <a href="{{ route('items.option-groups.index', $item) }}" class="act-btn amber">Options</a>
+                                <a href="{{ route('items.edit', $item) }}" class="act-btn mint">Edit</a>
+                                <form method="POST" action="{{ route('items.destroy', $item) }}" class="inline" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="act-btn chili" onclick="return confirm('Delete this item?')">Delete</button>
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($items as $item)
-                            <tr class="border-b">
-                                <td class="py-2">
-                                   @if ($item->image)
-                                         <img src="{{ Storage::url($item->image) }}" alt="{{ $item->name }}" class="w-12 h-12 object-cover rounded">
-                                   @else
-                                         <span class="text-gray-400 text-sm">No photo</span>
-                                   @endif
-                                </td>
-                                <td class="py-2">{{ $item->name }}</td>
-                                <td class="py-2">{{ $item->category->name }}</td>
-                                <td class="py-2">{{ number_format($item->price, 2) }} {{ config('app.currency') }}</td>
-                                <td class="py-2">{{ $item->available ? 'Yes' : 'No' }}</td>
-                                <td class="py-2">
-                                    <a href="{{ route('items.option-groups.index', $item) }}" class="text-indigo-600 underline">Options</a>
-                                    <a href="{{ route('items.edit', $item) }}" class="text-blue-600 underline ml-2">Edit</a>
-
-                                    <form method="POST" action="{{ route('items.destroy', $item) }}" class="inline ml-2">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 underline" onclick="return confirm('Delete this item?')">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6" class="py-4 text-gray-500">No items yet.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-
-            </div>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="mono" style="padding:20px 22px;color:var(--paper-dim);">No items yet.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
-</x-app-layout>
+</x-layouts.console>

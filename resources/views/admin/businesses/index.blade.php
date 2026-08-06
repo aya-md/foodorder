@@ -1,56 +1,50 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Business Approvals') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-
-                @if (session('status'))
-                    <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">
-                        {{ session('status') }}
-                    </div>
-                @endif
-
-                <table class="w-full text-left">
-                    <thead>
-                        <tr class="border-b">
-                            <th class="py-2">Name</th>
-                            <th class="py-2">Status</th>
-                            <th class="py-2">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($businesses as $business)
-                            <tr class="border-b">
-                                <td class="py-2">{{ $business->name }}</td>
-                                <td class="py-2">{{ $business->status }}</td>
-                                <td class="py-2">
-                                    @if ($business->status !== 'approved')
-                                        <form method="POST" action="{{ route('admin.businesses.approve', $business) }}" class="inline">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="text-green-600 underline">Approve</button>
-                                        </form>
-                                    @endif
-
-                                    @if ($business->status !== 'suspended')
-                                        <form method="POST" action="{{ route('admin.businesses.suspend', $business) }}" class="inline ml-2">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="text-red-600 underline">{{ $business->status === 'pending' ? 'Reject' : 'Suspend' }}</button>
-                                        </form>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-
-            </div>
+<x-layouts.console title="Business Approvals">
+    <div class="page-head">
+        <div>
+            <div class="eyebrow">Platform Admin</div>
+            <h1>Business Approvals</h1>
         </div>
     </div>
-</x-app-layout>
+
+    <div class="wrap" style="padding:20px 40px 40px;">
+        <div class="panel">
+            <table style="width:100%;border-collapse:collapse;">
+                <thead>
+                    <tr>
+                        <th class="mono" style="text-align:left;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-dim);padding:16px 22px;border-bottom:1px solid var(--line);font-weight:500;">Business</th>
+                        <th class="mono" style="text-align:left;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-dim);padding:16px 22px;border-bottom:1px solid var(--line);font-weight:500;">Status</th>
+                        <th class="mono" style="text-align:right;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-dim);padding:16px 22px;border-bottom:1px solid var(--line);font-weight:500;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($businesses as $business)
+                        <tr>
+                            <td style="padding:16px 22px;border-bottom:1px dashed var(--line);font-weight:700;">{{ $business->name }}</td>
+                            <td style="padding:16px 22px;border-bottom:1px dashed var(--line);">
+                                <span class="status-pill {{ $business->status }} {{ $business->status === 'pending' ? 'pulse' : '' }}">
+                                    <span class="dot"></span>{{ ucfirst($business->status) }}
+                                </span>
+                            </td>
+                            <td style="padding:16px 22px;border-bottom:1px dashed var(--line);text-align:right;">
+                                @if ($business->status !== 'approved')
+                                    <form method="POST" action="{{ route('admin.businesses.approve', $business) }}" class="inline" style="display:inline;">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="act-btn mint">Approve</button>
+                                    </form>
+                                @endif
+                                @if ($business->status !== 'suspended')
+                                    <form method="POST" action="{{ route('admin.businesses.suspend', $business) }}" class="inline ml-2" style="display:inline;">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="act-btn chili">{{ $business->status === 'pending' ? 'Reject' : 'Suspend' }}</button>
+                                    </form>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</x-layouts.console>

@@ -1,35 +1,34 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Add Option to :group', ['group' => $optionGroup->name]) }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-
-                <form method="POST" action="{{ route('option-groups.options.store', $optionGroup) }}">
-                    @csrf
-
-                    <div>
-                        <x-input-label for="label" :value="__('Option Label (e.g. Large, Extra Cheese)')" />
-                        <x-text-input id="label" class="block mt-1 w-full" type="text" name="label" :value="old('label')" required autofocus />
-                        <x-input-error :messages="$errors->get('label')" class="mt-2" />
-                    </div>
-
-                    <div class="mt-4">
-                        <x-input-label for="extra_price" :value="__('Extra Price in :currency (0 if none)', ['currency' => config('app.currency')])" />
-                        <x-text-input id="extra_price" class="block mt-1 w-full" type="number" step="0.01" min="0" name="extra_price" :value="old('extra_price', 0)" required />
-                        <x-input-error :messages="$errors->get('extra_price')" class="mt-2" />
-                    </div>
-
-                    <div class="mt-4">
-                        <x-primary-button>{{ __('Save') }}</x-primary-button>
-                    </div>
-                </form>
-
-            </div>
+<x-layouts.console title="Add Option">
+    <div class="page-head">
+        <div>
+            <div class="eyebrow">Vendor Console</div>
+            <h1>Add Option to {{ $optionGroup->name }}</h1>
         </div>
     </div>
-</x-app-layout>
+
+    @if ($errors->any())
+        <div class="form-errors">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('option-groups.options.store', $optionGroup) }}" class="panel form-panel">
+        @csrf
+
+        <div class="form-field">
+            <label>Option Label (e.g. Large, Extra Cheese)</label>
+            <input type="text" name="label" value="{{ old('label') }}" required autofocus>
+        </div>
+
+        <div class="form-field">
+            <label>Extra Price in {{ config('app.currency') }} (0 if none)</label>
+            <input type="number" step="0.01" min="0" name="extra_price" value="{{ old('extra_price', 0) }}" required>
+        </div>
+
+        <button type="submit" class="act-btn mint">Save</button>
+    </form>
+</x-layouts.console>

@@ -1,39 +1,28 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Table QR Codes') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-
-            @if (session('status'))
-                <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">
-                    {{ session('status') }}
-                </div>
-            @endif
-
-            <form method="POST" action="{{ route('tables.update') }}" class="mb-6 flex items-end gap-3">
-                @csrf
-                @method('PATCH')
-                <div>
-                    <label class="block text-sm font-medium">Number of Tables</label>
-                    <input type="number" name="table_count" value="{{ $business->table_count }}" min="1" max="200" class="mt-1 border-gray-300 rounded-md">
-                </div>
-                <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded">Update</button>
-            </form>
-
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                @foreach ($tables as $table)
-                    <div class="bg-white rounded-lg shadow-sm p-4 text-center">
-                        <p class="font-semibold mb-2">Table {{ $table['number'] }}</p>
-                        <img src="{{ $table['qr_image'] }}" alt="QR code for table {{ $table['number'] }}" class="mx-auto">
-                        <a href="{{ $table['qr_image'] }}" download="table-{{ $table['number'] }}.png" class="text-xs text-indigo-600 underline mt-2 inline-block">Download</a>
-                    </div>
-                @endforeach
-            </div>
-
+<x-layouts.console title="Table QR Codes">
+    <div class="page-head">
+        <div>
+            <div class="eyebrow">Vendor Console</div>
+            <h1>Table QR Codes</h1>
         </div>
     </div>
-</x-app-layout>
+
+    <form method="POST" action="{{ route('tables.update') }}" style="margin:20px 40px;display:flex;align-items:flex-end;gap:12px;">
+        @csrf
+        @method('PATCH')
+        <div class="form-field" style="margin:0;">
+            <label>Number of Tables</label>
+            <input type="number" name="table_count" value="{{ $business->table_count }}" min="1" max="200">
+        </div>
+        <button type="submit" class="act-btn mint" style="padding:10px 16px;">Update</button>
+    </form>
+
+    <div class="dash-grid" style="grid-template-columns:repeat(2, 1fr);">
+        @foreach ($tables as $table)
+            <div class="panel" style="padding:18px;text-align:center;">
+                <p class="mono" style="font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--amber);margin:0 0 12px;">Table {{ $table['number'] }}</p>
+                <img src="{{ $table['qr_image'] }}" alt="QR code for table {{ $table['number'] }}" style="display:block;margin:0 auto;max-width:100%;border-radius:4px;background:#fff;padding:8px;">
+                <a href="{{ $table['qr_image'] }}" download="table-{{ $table['number'] }}.png" class="act-btn amber" style="display:inline-block;margin-top:12px;">Download</a>
+            </div>
+        @endforeach
+    </div>
+</x-layouts.console>

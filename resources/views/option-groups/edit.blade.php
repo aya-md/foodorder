@@ -1,30 +1,30 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Option Group') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-
-                <form method="POST" action="{{ route('option-groups.update', $optionGroup) }}">
-                    @csrf
-                    @method('PATCH')
-
-                    <div>
-                        <x-input-label for="name" :value="__('Group Name')" />
-                        <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name', $optionGroup->name)" required autofocus />
-                        <x-input-error :messages="$errors->get('name')" class="mt-2" />
-                    </div>
-
-                    <div class="mt-4">
-                        <x-primary-button>{{ __('Update') }}</x-primary-button>
-                    </div>
-                </form>
-
-            </div>
+<x-layouts.console title="Edit Option Group">
+    <div class="page-head">
+        <div>
+            <div class="eyebrow">Vendor Console</div>
+            <h1>Edit Option Group</h1>
         </div>
     </div>
-</x-app-layout>
+
+    @if ($errors->any())
+        <div class="form-errors">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('option-groups.update', $optionGroup) }}" class="panel form-panel">
+        @csrf
+        @method('PATCH')
+
+        <div class="form-field">
+            <label>Group Name</label>
+            <input type="text" name="name" value="{{ old('name', $optionGroup->name) }}" required autofocus>
+        </div>
+
+        <button type="submit" class="act-btn mint">Update</button>
+    </form>
+</x-layouts.console>
