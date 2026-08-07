@@ -22,6 +22,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/menu/{slug}', [MenuController::class, 'show'])->name('menu.show');
 Route::post('/cart/add/{item}', [CartController::class, 'add'])->name('cart.add');
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
+Route::patch('/cart/decrease/{item}', [CartController::class, 'decrease'])->name('cart.decrease');
+Route::delete('/cart/remove/{item}', [CartController::class, 'remove'])->name('cart.remove');
 Route::get('/checkout', [OrderController::class, 'create'])->name('checkout.create');
 Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.store');
 Route::get('/order/{trackingUuid}', [OrderController::class, 'show'])->name('orders.show');
@@ -35,6 +37,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'owner'])->group(function () {
+    Route::patch('/categories/reorder', [CategoryController::class, 'reorder'])->name('categories.reorder');
     Route::resource('categories', CategoryController::class);
     Route::resource('items', ItemController::class);
     Route::resource('items.option-groups', OptionGroupController::class)->shallow();

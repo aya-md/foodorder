@@ -8,10 +8,13 @@ use App\Models\Item;
 use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class OrderController extends Controller
 {
+    private const BROADCAST_FAILED_MESSAGE = 'Broadcast failed for NewOrderPlaced: ';
+
     public function create(): View|RedirectResponse
     {
         $cart = session('cart', ['business_id' => null, 'items' => []]);
@@ -95,7 +98,11 @@ class OrderController extends Controller
             $order->items()->create($data);
         }
 
-        event(new NewOrderPlaced($order));
+        try {
+            event(new NewOrderPlaced($order));
+        } catch (\Throwable $e) {
+            Log::warning(self::BROADCAST_FAILED_MESSAGE.$e->getMessage());
+        }
 
         session()->forget('cart');
 

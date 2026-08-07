@@ -1,23 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>My Orders</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-gray-100 min-h-screen">
-    <div class="max-w-xl mx-auto py-10 px-4">
-        <h1 class="text-2xl font-bold mb-6">My Orders</h1>
+<x-layouts.ticket title="My Orders">
+    <div class="header-band torn-bottom">
+        <h1>My Orders</h1>
+        <p class="sub">Recent orders on this device</p>
+    </div>
 
+    <div class="receipt-card">
         @forelse ($orders as $order)
-            <a href="{{ route('orders.show', $order->tracking_uuid) }}" class="block bg-white rounded-lg shadow-sm p-4 mb-3 hover:bg-gray-50">
-                <p class="font-medium">Order #{{ $order->id }} — {{ $order->status }}</p>
-                <p class="text-sm text-gray-500">{{ $order->created_at->diffForHumans() }}</p>
+            <a href="{{ route('orders.show', $order->tracking_uuid) }}" style="display:flex;justify-content:space-between;align-items:center;text-decoration:none;color:var(--ink);padding:14px 0;border-bottom:1px dashed var(--line);">
+                <div>
+                    <p style="font-weight:600;font-size:14px;margin:0;">Order #{{ $order->id }}</p>
+                    <p class="mono" style="font-size:11.5px;color:var(--ink-dim);margin:3px 0 0;">{{ $order->created_at->diffForHumans() }}</p>
+                </div>
+                <span class="stamp {{ $order->status }}">{{ ucfirst(str_replace('_', ' ', $order->status)) }}</span>
             </a>
         @empty
-            <p class="text-gray-500">No recent orders found on this device.</p>
+            <p style="color:var(--ink-dim);">No recent orders found on this device.</p>
         @endforelse
     </div>
-</body>
-</html>
+</x-layouts.ticket>

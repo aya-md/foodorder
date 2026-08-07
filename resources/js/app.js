@@ -8,3 +8,6 @@ import Chart from 'chart.js/auto';
 window.Chart = Chart;
 
 import './echo';
+
+import Sortable from 'sortablejs';
+window.Sortable = Sortable;

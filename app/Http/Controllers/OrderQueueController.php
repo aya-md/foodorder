@@ -10,6 +10,8 @@ use App\Events\OrderStatusUpdated;
 
 class OrderQueueController extends Controller
 {
+    private const BROADCAST_FAILED_MESSAGE = 'Broadcast failed for OrderStatusUpdated: ';
+
     public function index(): View
 {
     $orders = Order::with('items.item')
@@ -39,7 +41,11 @@ class OrderQueueController extends Controller
     public function markPreparing(Order $order): RedirectResponse
 {
     $order->update(['status' => 'preparing']);
-    event(new OrderStatusUpdated($order));
+    try {
+        event(new OrderStatusUpdated($order));
+    }catch (\Throwable $e) {
+        \Illuminate\Support\Facades\Log::warning(self::BROADCAST_FAILED_MESSAGE.$e->getMessage());
+   }
 
     return back()->with('status', "Order #{$order->id} marked as preparing.");
 }
@@ -47,7 +53,11 @@ class OrderQueueController extends Controller
 public function markReady(Order $order): RedirectResponse
 {
     $order->update(['status' => 'ready']);
-    event(new OrderStatusUpdated($order));
+    try {
+        event(new OrderStatusUpdated($order));
+    } catch (\Throwable $e) {
+       \Illuminate\Support\Facades\Log::warning(self::BROADCAST_FAILED_MESSAGE.$e->getMessage());
+    }
 
     return back()->with('status', "Order #{$order->id} marked as ready.");
 }
@@ -55,7 +65,11 @@ public function markReady(Order $order): RedirectResponse
 public function markCompleted(Order $order): RedirectResponse
 {
     $order->update(['status' => 'completed']);
-    event(new OrderStatusUpdated($order));
+    try {
+        event(new OrderStatusUpdated($order));
+    } catch (\Throwable $e) {
+        \Illuminate\Support\Facades\Log::warning(self::BROADCAST_FAILED_MESSAGE.$e->getMessage());
+   }
 
     return back()->with('status', "Order #{$order->id} marked as completed.");
 }
@@ -63,7 +77,11 @@ public function markCompleted(Order $order): RedirectResponse
 public function cancel(Order $order): RedirectResponse
 {
     $order->update(['status' => 'cancelled']);
-    event(new OrderStatusUpdated($order));
+    try {
+       event(new OrderStatusUpdated($order));
+    } catch (\Throwable $e) {
+       \Illuminate\Support\Facades\Log::warning(self::BROADCAST_FAILED_MESSAGE.$e->getMessage());
+    }
 
     return back()->with('status', "Order #{$order->id} cancelled.");
 }

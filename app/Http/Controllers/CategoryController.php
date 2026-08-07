@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -58,5 +59,19 @@ class CategoryController extends Controller
         $category->delete();
 
         return redirect()->route('categories.index')->with('status', 'Category deleted.');
+    }
+
+    public function reorder(Request $request): JsonResponse
+    {
+        $request->validate([
+            'order' => ['required', 'array'],
+            'order.*' => ['integer', 'exists:categories,id'],
+        ]);
+
+        foreach ($request->order as $index => $categoryId) {
+            Category::where('id', $categoryId)->update(['position' => $index]);
+        }
+
+        return response()->json(['status' => 'ok']);
     }
 }

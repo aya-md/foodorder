@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Archivo:wght@400;500;600;700;800&display=swap');
+
+.ticket {
+    --paper:#F3ECDA; --paper-2:#FBF8F0; --ink:#1C1B19; --ink-dim:#5F5E52;
+    --chalk:#2F4739; --stamp:#C1443D; --stamp-dim:#8A2A25; --line:#C9BFA3;
+
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Archivo', sans-serif;
+    min-height: 100vh;
+}
+
+.ticket .mono { font-family: 'IBM Plex Mono', monospace; }
+
+.ticket .torn-bottom {
+    clip-path: polygon(0 0,100% 0,100% 92%,97% 100%,94% 92%,91% 100%,88% 92%,85% 100%,82% 92%,79% 100%,76% 92%,73% 100%,70% 92%,67% 100%,64% 92%,61% 100%,58% 92%,55% 100%,52% 92%,49% 100%,46% 92%,43% 100%,40% 92%,37% 100%,34% 92%,31% 100%,28% 92%,25% 100%,22% 92%,19% 100%,16% 92%,13% 100%,10% 92%,7% 100%,4% 92%,1% 100%,0 92%);
+}
+
+.ticket .header-band { background: var(--chalk); padding:20px 20px 30px; }
+.ticket .header-band h1 { margin:0; color:var(--paper); font-family:'Archivo',sans-serif; font-weight:700; font-size:20px; text-transform:uppercase; letter-spacing:.02em; }
+.ticket .header-band .sub { font-family:'IBM Plex Mono',monospace; font-size:11px; color:#B7C9BC; margin:4px 0 0; }
+
+.ticket .page-wrap { max-width:1000px; margin:0 auto; padding:0 16px 40px; }
+
+.ticket .receipt-card { background:var(--paper-2); border-radius:0 0 8px 8px; padding:20px 22px 24px; }
+.ticket .section-label { font-family:'Archivo',sans-serif; font-size:13px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--chalk); margin:0 0 12px; }
+
+.ticket .line-item { display:flex; align-items:baseline; gap:6px; padding:10px 0; border-bottom:1px dashed var(--line); }
+.ticket .line-item .name { font-family:'Archivo',sans-serif; font-size:14px; }
+.ticket .line-item .leader { flex:1; border-bottom:1px dotted var(--ink-dim); transform:translateY(-4px); }
+.ticket .line-item .price { font-family:'IBM Plex Mono',monospace; font-size:13px; white-space:nowrap; }
+
+.ticket .btn-add { font-family:'Archivo',sans-serif; font-size:12px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; background:var(--stamp); color:#F9E9E7; border:none; border-radius:4px; padding:8px 14px; cursor:pointer; }
+.ticket .btn-primary { display:block; width:100%; text-align:center; font-family:'Archivo',sans-serif; font-size:13px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; background:var(--stamp); color:#F9E9E7; border:none; border-radius:4px; padding:12px; cursor:pointer; text-decoration:none; }
+.ticket .btn-secondary { display:inline-block; font-family:'Archivo',sans-serif; font-size:12px; font-weight:600; text-transform:uppercase; background:var(--chalk); color:var(--paper); border:1px solid var(--chalk); border-radius:4px; padding:9px 14px; text-decoration:none; }
+.ticket .link { color:var(--stamp-dim); text-decoration:underline; font-size:13px; }
+
+.ticket .stamp { display:inline-block; font-family:'Archivo',sans-serif; font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; border:1.5px solid; border-radius:3px; padding:4px 9px; transform:rotate(-4deg); }
+.ticket .stamp.pending { border-color:var(--stamp); color:var(--stamp-dim); }
+.ticket .stamp.preparing { border-color:#8A6D1A; color:#8A6D1A; }
+.ticket .stamp.ready { border-color:var(--chalk); color:var(--chalk); }
+.ticket .stamp.completed { border-color:#4C7A5A; color:#3B6047; }
+.ticket .stamp.cancelled { border-color:var(--stamp-dim); color:var(--stamp-dim); }
+
+.ticket .flash { margin:0 0 16px; padding:12px 16px; border-radius:6px; font-size:13.5px; }
+.ticket .flash.success { background:#E6F0E8; color:#2F4739; }
+
+.ticket .form-field { margin-bottom:14px; }
+.ticket .form-field label { display:block; font-family:'Archivo',sans-serif; font-size:12.5px; font-weight:600; margin-bottom:5px; }
+.ticket .form-field input, .ticket .form-field select, .ticket .form-field textarea {
+    width:100%; background:#fff; border:1px solid var(--line); border-radius:4px;
+    color:var(--ink); padding:9px 11px; font-family:'Archivo',sans-serif; font-size:14px; box-sizing:border-box;
+}
+.ticket .form-field input:focus, .ticket .form-field select:focus { outline:none; border-color:var(--stamp); }
+
+.ticket .item-row { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px dashed var(--line); }
+.ticket .item-photo { width:52px; height:52px; border-radius:6px; object-fit:cover; border:1px solid var(--line); flex-shrink:0; }
+.ticket .item-photo-placeholder {
+    width:52px; height:52px; border-radius:6px; border:1px dashed var(--line); flex-shrink:0;
+    background:repeating-linear-gradient(45deg, #ece5d6 0 6px, #e2d9c6 6px 12px);
+}
+.ticket .item-info { flex:1; min-width:0; }
+.ticket .item-desc { font-family:'Archivo',sans-serif; font-size:12px; color:var(--ink-dim); margin-top:3px; }

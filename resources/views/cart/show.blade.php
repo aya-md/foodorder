@@ -1,47 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Your Cart</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-gray-100 min-h-screen">
-    <div class="max-w-3xl mx-auto py-10 px-4">
-        <h1 class="text-2xl font-bold mb-6">Your Cart</h1>
+<x-layouts.ticket title="Your Cart">
+    <div class="header-band torn-bottom">
+        <h1>Your Cart</h1>
         @if ($business)
-        <a href="{{ route('menu.show', $business->slug) }}" class="text-indigo-600 underline text-sm">
-             ← Continue Shopping
-        </a>
+            <p class="sub">Ordering from {{ $business->name }}</p>
+        @endif
+    </div>
+
+    <div class="receipt-card">
+        @if (session('status'))
+            <div class="flash success">{{ session('status') }}</div>
         @endif
 
         @if ($business)
-            <p class="text-gray-600 mb-4">Ordering from {{ $business->name }}</p>
+            <a href="{{ route('menu.show', $business->slug) }}" class="link">← Continue Shopping</a>
+            <div style="margin-top:14px;"></div>
         @endif
 
         @forelse ($items as $entry)
-            <div class="bg-white rounded-lg shadow-sm p-4 mb-2 flex justify-between items-center">
-                <div>
-                    <p class="font-medium">{{ $entry['item']->name }}</p>
-                    <p class="text-sm text-gray-500">Qty: {{ $entry['quantity'] }}</p>
+            <div class="line-item" style="align-items:center;">
+                <span class="name">{{ $entry['item']->name }}</span>
+
+                <div style="display:flex;align-items:center;gap:8px;margin:0 10px;">
+                    <form method="POST" action="{{ route('cart.decrease', $entry['item']) }}">
+                        @csrf @method('PATCH')
+                        <button type="submit" style="width:24px;height:24px;border:1px solid var(--line);background:var(--paper-2);border-radius:4px;font-family:'IBM Plex Mono',monospace;color:var(--ink);cursor:pointer;">−</button>
+                    </form>
+                    <span class="mono" style="min-width:16px;text-align:center;">{{ $entry['quantity'] }}</span>
+                    <form method="POST" action="{{ route('cart.add', $entry['item']) }}">
+                        @csrf
+                        <button type="submit" style="width:24px;height:24px;border:1px solid var(--line);background:var(--paper-2);border-radius:4px;font-family:'IBM Plex Mono',monospace;color:var(--ink);cursor:pointer;">+</button>
+                    </form>
                 </div>
-                <p class="font-semibold">{{ number_format($entry['line_total'], 2) }} {{ config('app.currency') }}</p>
+
+                <span class="leader"></span>
+                <span class="price">{{ number_format($entry['line_total'], 2) }} {{ config('app.currency') }}</span>
+
+                <form method="POST" action="{{ route('cart.remove', $entry['item']) }}" style="margin-left:8px;">
+                    @csrf @method('DELETE')
+                    <button type="submit" class="mono" style="background:none;border:none;color:var(--stamp-dim);font-size:11px;text-decoration:underline;cursor:pointer;padding:0;">Remove</button>
+                </form>
             </div>
         @empty
-            <p class="text-gray-500">Your cart is empty.</p>
+            <p style="color:var(--ink-dim);">Your cart is empty.</p>
         @endforelse
+
         @if ($items->isNotEmpty())
-          <div class="mt-4 text-right font-bold text-lg">
-              Total: {{ number_format($total, 2) }} {{ config('app.currency') }}
-          </div>
+            <div class="line-item mono" style="border-bottom:none;border-top:1px solid var(--ink);margin-top:6px;padding-top:14px;font-weight:700;">
+                <span class="name" style="font-family:'Archivo',sans-serif;font-weight:700;">Total</span>
+                <span class="leader" style="border:none;"></span>
+                <span class="price" style="font-size:15px;">{{ number_format($total, 2) }} {{ config('app.currency') }}</span>
+            </div>
 
-          <div class="mt-4 text-right">
-               <a href="{{ route('checkout.create') }}" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded">
-                    Proceed to Checkout
-               </a>
-          </div>
+            <a href="{{ route('checkout.create') }}" class="btn-primary" style="margin-top:20px;">Proceed to Checkout</a>
         @endif
-
     </div>
-</body>
-</html>
+</x-layouts.ticket>
