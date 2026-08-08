@@ -6,7 +6,6 @@
         </div>
         <div class="mono" style="color:var(--amber);">{{ $activeCount }} active {{ Str::plural('order', $activeCount) }}</div>
     </div>
-
     <div class="queue-grid">
         @foreach ($columns as $key => $column)
             <div class="queue-col">
@@ -15,7 +14,6 @@
                     {{ $column['label'] }}
                     <span class="count">{{ $column['orders']->count() }}</span>
                 </div>
-
                 @forelse ($column['orders'] as $order)
                     <div class="ticket-card">
                         <div class="ticket-top">
@@ -46,7 +44,6 @@
                                         <button class="act-btn mint">Complete</button>
                                     </form>
                                 @endif
-
                                 @if ($key !== 'completed')
                                     <form method="POST" action="{{ route('orders.cancel', $order) }}">
                                         @csrf @method('PATCH')
@@ -62,4 +59,16 @@
             </div>
         @endforeach
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.Echo.private(`business.{{ auth()->user()->business_id }}.orders`)
+                .listen('.order.created', (e) => {
+                    window.location.reload();
+                })
+                .listen('.order.status.updated', (e) => {
+                    window.location.reload();
+                });
+        });
+    </script>
 </x-layouts.console>
