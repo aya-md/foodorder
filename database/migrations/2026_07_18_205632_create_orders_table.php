@@ -16,10 +16,10 @@ return new class extends Migration
             $table->foreignId('business_id')->constrainted()->cascadeOnDelete();
             $table->uuid('tracking_uuid')->unique();
             $table->string('customer_name');
-            $table->enum('type',['dine_in','take_away']);
+            $table->enum('type', ['dine_in', 'take_away']);
             $table->string('table_number')->nullable();
             $table->string('phone')->nullable();
-            $table->enum('status',['pending','preparing','ready','completed','cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'preparing', 'ready', 'completed', 'cancelled'])->default('pending');
             $table->decimal('total', 8, 2)->default(0);
             $table->timestamps();
         });

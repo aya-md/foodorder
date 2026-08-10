@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\View\View;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class StatsController extends Controller
 {
@@ -43,7 +42,7 @@ class StatsController extends Controller
             ->pluck('total', 'date');
 
         $revenueData = $labels->map(fn ($date) => (float) ($revenueByDay[$date] ?? 0));
-       
+
         return view('stats.index', compact('ordersToday', 'revenueToday', 'topItems', 'labels', 'revenueData'));
     }
 }

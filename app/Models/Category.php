@@ -8,19 +8,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[Fillable(['business_id','name','position'])]
+#[Fillable(['business_id', 'name', 'position'])]
 class Category extends Model
 {
-    use HasFactory,BelongsToBusiness;
+    use BelongsToBusiness,HasFactory;
+
     public function business(): BelongsTo
     {
         return $this->belongsTo(Business::class);
     }
+
     public function items(): HasMany
     {
         return $this->hasMany(Item::class);
     }
-
 }

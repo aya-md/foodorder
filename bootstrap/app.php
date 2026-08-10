@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Middleware\EnsureUserIsOwner;
+use App\Http\Middleware\EnsureUserIsOwnerOrStaff;
 use App\Http\Middleware\EnsureUserIsSuperAdmin;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
-use App\Http\Middleware\EnsureUserIsOwnerOrStaff;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -25,7 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'super_admin' => EnsureUserIsSuperAdmin::class,
             'owner' => EnsureUserIsOwner::class,
             'owner_or_staff' => EnsureUserIsOwnerOrStaff::class,
-]);
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

@@ -8,22 +8,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[fillable(['business_id','option_group_id','label','extra_price'])]
+#[Fillable(['business_id', 'option_group_id', 'label', 'extra_price'])]
 class Option extends Model
 {
-    use HasFactory,BelongsToBusiness;
+    use BelongsToBusiness,HasFactory;
 
-    protected function casts():array
-    { return[
-        'extra_price' => 'decimal:2',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'extra_price' => 'decimal:2',
+        ];
     }
-    public function business():BelongsTo
+
+    public function business(): BelongsTo
     {
         return $this->belongsTo(Business::class);
     }
 
-    public function OptionGroup():BelongsTo
+    public function OptionGroup(): BelongsTo
     {
         return $this->belongsTo(OptionGroup::class);
     }

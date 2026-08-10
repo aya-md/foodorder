@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 #[Fillable(['business_id', 'customer_name', 'phone', 'type', 'table_number', 'status', 'total'])]
 class Order extends Model
 {
-    use HasFactory, BelongsToBusiness;
+    use BelongsToBusiness, HasFactory;
 
     protected function casts(): array
     {

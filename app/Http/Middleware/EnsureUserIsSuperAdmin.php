@@ -15,9 +15,10 @@ class EnsureUserIsSuperAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(! $request->user() || $request->user()->role !== 'super_admin'){
-            abort(403,'you do not have permission to access this page');
+        if (! $request->user() || $request->user()->role !== 'super_admin') {
+            abort(403, 'you do not have permission to access this page');
         }
+
         return $next($request);
     }
 }

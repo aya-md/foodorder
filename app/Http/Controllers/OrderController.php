@@ -59,6 +59,7 @@ class OrderController extends Controller
         foreach ($cart['items'] as $itemId => $details) {
             if (! $items->has($itemId)) {
                 $unavailable[] = $itemId;
+
                 continue;
             }
 

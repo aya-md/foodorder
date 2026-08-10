@@ -1,22 +1,21 @@
 <?php
 
 use App\Http\Controllers\Admin\BusinessApprovalController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\OptionGroupController;
-use App\Http\Controllers\OptionController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\StaffController;
-use App\Http\Controllers\MenuController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\OptionController;
+use App\Http\Controllers\OptionGroupController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderQueueController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\TableQrController;
-use App\Http\Controllers\HomeController;
-
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/menu/{slug}', [MenuController::class, 'show'])->name('menu.show');
@@ -42,14 +41,14 @@ Route::middleware(['auth', 'owner'])->group(function () {
     Route::resource('items', ItemController::class);
     Route::resource('items.option-groups', OptionGroupController::class)->shallow();
     Route::resource('option-groups.options', OptionController::class)
-    ->only(['create', 'store', 'edit', 'update', 'destroy'])
-    ->shallow();
+        ->only(['create', 'store', 'edit', 'update', 'destroy'])
+        ->shallow();
     Route::resource('staff', StaffController::class)
-    ->parameters(['staff' => 'staff'])
-    ->only(['index', 'create', 'store', 'destroy']);
+        ->parameters(['staff' => 'staff'])
+        ->only(['index', 'create', 'store', 'destroy']);
     Route::get('/stats', [StatsController::class, 'index'])->name('stats.index');
     Route::get('/tables', [TableQrController::class, 'index'])->name('tables.index');
-Route::patch('/tables', [TableQrController::class, 'update'])->name('tables.update');
+    Route::patch('/tables', [TableQrController::class, 'update'])->name('tables.update');
 });
 
 Route::middleware(['auth', 'super_admin'])->prefix('admin')->name('admin.')->group(function () {

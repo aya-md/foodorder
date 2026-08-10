@@ -15,7 +15,6 @@ use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
-
 class RegisteredUserController extends Controller
 {
     /**
@@ -50,7 +49,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'business_id' => $business->id,
-            'role'=>'owner',
+            'role' => 'owner',
         ]);
 
         event(new Registered($user));

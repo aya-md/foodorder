@@ -13,9 +13,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 #[Fillable(['business_id', 'category_id', 'name', 'price', 'description', 'image', 'available'])]
 class Item extends Model
 {
-    use HasFactory,BelongsToBusiness,SoftDeletes;
+    use BelongsToBusiness,HasFactory,SoftDeletes;
 
-    protected function casts():array
+    protected function casts(): array
     {
         return [
             'available' => 'boolean',
@@ -23,17 +23,17 @@ class Item extends Model
         ];
     }
 
-    public function business():BelongsTo
+    public function business(): BelongsTo
     {
         return $this->belongsTo(Business::class);
     }
 
-    public function category():BelongsTo
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function optionGroups():hasMany
+    public function optionGroups(): HasMany
     {
         return $this->hasMany(OptionGroup::class);
     }

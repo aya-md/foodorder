@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Business;
 use App\Models\Item;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -87,7 +88,7 @@ class CartController extends Controller
             }
         }
 
-        $business = $cart['business_id'] ? \App\Models\Business::find($cart['business_id']) : null;
+        $business = $cart['business_id'] ? Business::find($cart['business_id']) : null;
 
         return view('cart.show', compact('items', 'total', 'business'));
     }

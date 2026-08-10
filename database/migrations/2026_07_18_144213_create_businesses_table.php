@@ -10,18 +10,18 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::create('businesses', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->string('slug')->unique();
-        $table->string('logo')->nullable();
-        $table->string('opening_hours')->nullable();
-        $table->boolean('is_open')->default(true);
-        $table->enum('status', ['pending', 'approved', 'suspended'])->default('pending');
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('businesses', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->string('logo')->nullable();
+            $table->string('opening_hours')->nullable();
+            $table->boolean('is_open')->default(true);
+            $table->enum('status', ['pending', 'approved', 'suspended'])->default('pending');
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.

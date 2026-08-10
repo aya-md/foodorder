@@ -3,10 +3,12 @@
 namespace App\Models\Concerns;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @mixin \Illuminate\Database\Eloquent\Model
+ * @mixin Model
+ *
  * @method static void addGlobalScope(string $identifier, \Illuminate\Database\Eloquent\Scope|callable $scope)
  * @method static void creating(\Closure $callback)
  */

@@ -37,20 +37,20 @@ class OptionGroupController extends Controller
 
     public function edit(OptionGroup $optionGroup): View
     {
-    return view('option-groups.edit', compact('optionGroup'));
+        return view('option-groups.edit', compact('optionGroup'));
     }
 
-   public function update(Request $request, OptionGroup $optionGroup): RedirectResponse
-   {
-       $request->validate([
-        'name' => ['required', 'string', 'max:255'],
+    public function update(Request $request, OptionGroup $optionGroup): RedirectResponse
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
         ]);
 
-       $optionGroup->update([
-        'name' => $request->name,
-       ]);
+        $optionGroup->update([
+            'name' => $request->name,
+        ]);
 
-       return redirect()->route('items.option-groups.index', $optionGroup->item)->with('status', 'Option group updated.');
+        return redirect()->route('items.option-groups.index', $optionGroup->item)->with('status', 'Option group updated.');
     }
 
     public function destroy(OptionGroup $optionGroup): RedirectResponse

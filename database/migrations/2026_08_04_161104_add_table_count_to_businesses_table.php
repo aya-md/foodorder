@@ -10,16 +10,16 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::table('businesses', function (Blueprint $table) {
-        $table->unsignedInteger('table_count')->default(10);
-    });
-}
+    {
+        Schema::table('businesses', function (Blueprint $table) {
+            $table->unsignedInteger('table_count')->default(10);
+        });
+    }
 
-public function down(): void
-{
-    Schema::table('businesses', function (Blueprint $table) {
-        $table->dropColumn('table_count');
-    });
-}
+    public function down(): void
+    {
+        Schema::table('businesses', function (Blueprint $table) {
+            $table->dropColumn('table_count');
+        });
+    }
 };
