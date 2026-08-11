@@ -7,6 +7,10 @@
         <a href="{{ route('items.create') }}" class="act-btn mint">+ Add Item</a>
     </div>
 
+    @if (session('status'))
+        <div class="status-flash">{{ session('status') }}</div>
+    @endif
+
     <div class="wrap" style="padding:20px 40px 40px;">
         <div class="panel">
             <table style="width:100%;border-collapse:collapse;">
@@ -25,7 +29,7 @@
                             <td style="padding:16px 22px;border-bottom:1px dashed var(--line);">
                                 <div style="display:flex;align-items:center;gap:12px;">
                                     @if ($item->image)
-                                        <img src="{{ Storage::url($item->image) }}" alt="{{ $item->name }}" style="width:38px;height:38px;border-radius:8px;object-fit:cover;border:1px solid var(--line);">
+                                        <img src="{{ Storage::url($item->image) }}" alt="{{ $item->name }}" style="width:38px;height:38px;border-radius:8px;object-fit:contain;background:#241F1A;border:1px solid var(--line);">
                                     @else
                                         <div style="width:38px;height:38px;border-radius:8px;background:var(--panel-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--amber);flex-shrink:0;">🍽</div>
                                     @endif
@@ -53,7 +57,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="mono" style="padding:20px 22px;color:var(--paper-dim);">No items yet.</td>
+                            <td colspan="6" class="mono" style="padding:20px 22px;color:var(--paper-dim);">No items yet.</td>
                         </tr>
                     @endforelse
                 </tbody>

@@ -54,7 +54,7 @@
 .ticket .form-field input:focus, .ticket .form-field select:focus { outline:none; border-color:var(--stamp); }
 
 .ticket .item-row { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px dashed var(--line); }
-.ticket .item-photo { width:52px; height:52px; border-radius:6px; object-fit:cover; border:1px solid var(--line); flex-shrink:0; }
+.ticket .item-photo { width:52px; height:52px; border-radius:6px; object-fit:contain; background:var(--paper-2); border:1px solid var(--line); flex-shrink:0; }
 .ticket .item-photo-placeholder {
     width:52px; height:52px; border-radius:6px; border:1px dashed var(--line); flex-shrink:0;
     background:repeating-linear-gradient(45deg, #ece5d6 0 6px, #e2d9c6 6px 12px);

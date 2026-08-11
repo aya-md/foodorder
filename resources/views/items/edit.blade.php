@@ -54,7 +54,7 @@
         <div class="form-field">
             <label>Current Photo</label>
             @if ($item->image)
-                <img src="{{ Storage::url($item->image) }}" alt="{{ $item->name }}" style="width:80px;height:80px;border-radius:8px;object-fit:cover;border:1px solid var(--line);display:block;margin-top:6px;">
+                <img src="{{ Storage::url($item->image) }}" alt="{{ $item->name }}" style="width:80px;height:80px;border-radius:8px;object-fit:contain;background:#241F1A;border:1px solid var(--line);display:block;margin-top:6px;">
             @else
                 <p class="mono" style="color:var(--paper-dim);font-size:12px;margin-top:6px;">No photo uploaded yet.</p>
             @endif

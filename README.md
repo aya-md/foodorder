@@ -84,3 +84,6 @@ Every push to `main` runs automatically via GitHub Actions (`.github/workflows/c
 - `app/Models/Concerns/BelongsToBusiness.php` — the trait enforcing tenant isolation across every business-owned model
 - `resources/css/console.css` / `ticket.css` — the two visual themes, each scoped under its own wrapper class so they never conflict
 - `docker/nginx.conf` — Nginx config routing requests to PHP-FPM
+
+Item photo uploads require the storage symlink to be created *inside* the container specifically — running `storage:link` on your host machine creates a symlink pointing to a host-only path that won't resolve inside Docker.
+docker compose exec app php artisan storage:link
