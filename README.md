@@ -94,6 +94,10 @@ php artisan db:seed --class=Database\\Seeders\\QuietCupSeeder
 ```
 (prefix with `docker compose exec app` if running via Docker)
 
+This creates:
+- Owner: `owner@thequietcup.test` / `password`
+- Staff: `sara@thequietcup.test` / `password` and `yassine@thequietcup.test` / `password`
+
 ## Testing
 
 ```bash
