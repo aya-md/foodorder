@@ -4,6 +4,10 @@ A multi-vendor food ordering platform built with Laravel — a lightweight, whit
 
 Built as an internship project at Zydev.
 
+## Development Journal
+
+[`JOURNAL.md`](JOURNAL.md) documents the actual day-by-day build process — real debugging, real decisions, and real fixes, not just the finished result.
+
 ## Features
 
 - **Multi-vendor**: any number of independent businesses, each with their own menu, staff, and orders — fully isolated from one another
@@ -26,6 +30,7 @@ npm install
 cp .env.example .env
 php artisan key:generate
 php artisan migrate
+php artisan storage:link
 npm run build
 ```
 
@@ -60,9 +65,34 @@ docker compose up -d
 docker compose exec app php artisan migrate
 docker compose exec app php artisan session:table
 docker compose exec app php artisan migrate
+docker compose exec app php artisan storage:link
 ```
 
+Item photo uploads require the storage symlink to be created *inside* the container specifically — running `storage:link` on your host machine creates a symlink pointing to a host-only path that won't resolve inside Docker.
+
 Visit `http://localhost:8000`.
+
+## First-Time Setup: Accounts & Demo Data
+
+No super admin account exists by default. Create one via tinker (or `docker compose exec app php artisan tinker` for the Docker setup):
+
+```bash
+php artisan tinker
+```
+```php
+\App\Models\User::create([
+    'name' => 'Platform Admin',
+    'email' => 'admin@foodorder.test',
+    'password' => bcrypt('password'),
+    'role' => 'super_admin',
+]);
+```
+
+To populate a full, realistic demo business ("The Quiet Cup") instead of starting empty:
+```bash
+php artisan db:seed --class=Database\\Seeders\\QuietCupSeeder
+```
+(prefix with `docker compose exec app` if running via Docker)
 
 ## Testing
 
@@ -84,12 +114,3 @@ Every push to `main` runs automatically via GitHub Actions (`.github/workflows/c
 - `app/Models/Concerns/BelongsToBusiness.php` — the trait enforcing tenant isolation across every business-owned model
 - `resources/css/console.css` / `ticket.css` — the two visual themes, each scoped under its own wrapper class so they never conflict
 - `docker/nginx.conf` — Nginx config routing requests to PHP-FPM
-
-Item photo uploads require the storage symlink to be created *inside* the container specifically — running `storage:link` on your host machine creates a symlink pointing to a host-only path that won't resolve inside Docker.
-
-docker compose exec app php artisan storage:link
-
-
-## Development Journal
-
-[`JOURNAL.md`](JOURNAL.md) documents the actual day-by-day build process — real debugging, real decisions, and real fixes, not just the finished result.
