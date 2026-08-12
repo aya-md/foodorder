@@ -86,4 +86,10 @@ Every push to `main` runs automatically via GitHub Actions (`.github/workflows/c
 - `docker/nginx.conf` — Nginx config routing requests to PHP-FPM
 
 Item photo uploads require the storage symlink to be created *inside* the container specifically — running `storage:link` on your host machine creates a symlink pointing to a host-only path that won't resolve inside Docker.
+
 docker compose exec app php artisan storage:link
+
+
+## Development Journal
+
+[`JOURNAL.md`](JOURNAL.md) documents the actual day-by-day build process — real debugging, real decisions, and real fixes, not just the finished result.
